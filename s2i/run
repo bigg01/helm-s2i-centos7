@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -e
+CHART=$(ls /opt/app-root/src/*.tgz)
+exec helm install $CHART

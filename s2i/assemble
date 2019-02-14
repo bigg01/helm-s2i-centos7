@@ -1,0 +1,51 @@
+#!/bin/bash
+set -e
+
+echo
+echo "===> Build started at $(date)"
+echo
+START=$SECONDS
+
+# Unconditionally print elapsed build time at exit
+function finish {
+  echo "===> Elapsed time: $(($SECONDS - $START)) seconds"
+}
+trap finish EXIT
+
+echo "---> building CHART: ${CHART}"
+
+echo "---> Preparing source..."
+HELMDIR="helm_dir"
+mkdir -p helm_dir
+
+cp -Rf /tmp/src/. $HELMDIR
+
+ls -larhR $HELMDIR
+#
+
+HELMVERSION=$(helm version --client)
+
+
+echo "** helmi **"
+echo "============================================="
+echo "|| HELMVERSION: $HELMVERSION"
+echo "============================================="
+
+
+
+echo "---> Building helm package..."
+
+
+helm package $HELMDIR/$CHART
+  ERR=$?
+  if [ $ERR -ne 0 ]; then
+    echo "Aborting due to error code $ERR"
+    exit $ERR
+  fi
+echo "---> Building finish"
+
+#echo "install binary"
+ls -larht $HELMDIR
+
+echo
+echo "===> Build completed at $(date)"

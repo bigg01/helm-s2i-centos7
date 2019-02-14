@@ -11,8 +11,8 @@ LABEL io.k8s.description="Platform for building and deploy Helm packages" \
 
 RUN yum install -y --setopt=tsflags=nodocs git bash && yum clean all
 
-ENV HELM_VERSION=v2.12.3
-    #HELM_HOME=/helm
+ENV HELM_VERSION=v2.12.3 \
+    HELM_HOME=/helm
 
 RUN (curl -L "https://storage.googleapis.com/kubernetes-helm/helm-${HELM_VERSION}-linux-amd64.tar.gz" | \
         tar -xz -C /usr/local/bin/) && cd /usr/local/bin/linux-amd64 && \
@@ -22,7 +22,8 @@ RUN (curl -L "https://storage.googleapis.com/kubernetes-helm/helm-${HELM_VERSION
     helm plugin install https://github.com/chartmuseum/helm-push && \
     helm plugin install https://github.com/databus23/helm-diff --version master && \
     helm version --client && \
-    helm plugin list
+    helm plugin list && \
+    chmod -R g+rwX "${HELM_HOME}" 
 
 # Install oc-client
 
@@ -33,6 +34,8 @@ RUN (curl -L https://github.com/openshift/origin/releases/download/${OCP_VERSION
        tar -xz -C /usr/local/bin/) && cd /usr/local/bin/openshift-origin-client-tools-${OCP_VERSION}-${OCP_CLIENT_HASH}-linux-64bit/ &&  mv oc .. && mv kubectl .. && \
        cd - && rm -rf /usr/local/bin/openshift-origin-client-tools-${OCP_VERSION}-${OCP_CLIENT_HASH}-linux-64bit/ 
 
+ENV TZ=Europe/Zurich \
+    TERM=xterm
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
 COPY ./s2i/ $STI_SCRIPTS_PATH
 
