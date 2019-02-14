@@ -20,7 +20,7 @@ mkdir -p helm_dir
 
 cp -Rf /tmp/src/. $HELMDIR
 
-ls -larhR $HELMDIR
+ls -larhR .
 #
 
 HELMVERSION=$(helm version --client)
@@ -29,6 +29,7 @@ HELMVERSION=$(helm version --client)
 echo "** helmi **"
 echo "============================================="
 echo "|| HELMVERSION: $HELMVERSION"
+echo "|| CHART: $CHART"
 echo "============================================="
 
 

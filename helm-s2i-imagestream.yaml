@@ -1,0 +1,17 @@
+---
+kind: ImageStream
+apiVersion: v1
+metadata:
+  name: helm-openshift
+spec:
+  dockerImageRepository: bigg01/helm-s2i-centos7
+  tags:
+  - name: 'latest'
+    annotations:
+      description: Helm S2I images.
+      iconClass: icon-go
+      tags: builder,helm
+      supports: helm:latest
+      sampleRepo: https://github.com/bigg01/go-s2i-centos7
+      sampleContextDir: helm
+      version: 'latest'
