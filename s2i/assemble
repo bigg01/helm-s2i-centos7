@@ -52,8 +52,20 @@ done
 
 echo "---> Building finish"
 
-#echo "install binary"
-ls -larht $HOME
+echo 
+
+
+charts=$(find /tmp/src/* -maxdepth 1 -name Chart.yaml -exec dirname "{}" \;)
+for chart in $charts; do
+  echo "----> Inspect Chart  ${chart}"
+  helm inspect chart ${chart}
+    ERR=$?
+  if [ $ERR -ne 0 ]; then
+    echo "Aborting due to error code $ERR"
+    exit $ERR
+  fi
+  echo
+done
 
 echo
 echo "===> Build completed at $(date)"
