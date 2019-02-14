@@ -2,4 +2,5 @@
 
 set -e
 CHART=$(ls /opt/app-root/src/*.tgz)
+echo "you can run now HELM commands"
 exec helm install $CHART || helm upgrade $CHART
